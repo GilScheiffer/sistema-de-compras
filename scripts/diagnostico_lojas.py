@@ -1,33 +1,26 @@
 """Testa se cada loja responde à busca a partir desta máquina (útil rodando no GitHub Actions)."""
 
+import re
 import subprocess
 
-import httpx
-from curl_cffi import requests as cr
+from compras.coletores import mercado_livre
 
-from compras.coletores import amazon, mercado_livre
-
-UA = amazon._HEADERS["User-Agent"]
-TERMOS = ["arroz", "detergente"]
+UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
 
 
-def relatar(nome, status, n):
-    print(f"{nome:32} HTTP {status}  -> {n} produtos", flush=True)
-
-
-for termo in TERMOS:
-    url_ml = f"https://lista.mercadolivre.com.br/{termo}"
-    r = httpx.get(url_ml, headers=mercado_livre._HEADERS, follow_redirects=True, timeout=30)
-    relatar(f"ML httpx ({termo})", r.status_code, len(mercado_livre.extrair(r.text)))
-    s = cr.Session(impersonate="chrome")
-    r = s.get(url_ml, timeout=30)
-    relatar(f"ML curl_cffi ({termo})", r.status_code, len(mercado_livre.extrair(r.text)))
-    r = s.get(amazon.URL_BUSCA, params={"k": termo, "i": "grocery"}, timeout=30)
-    relatar(f"Amazon curl_cffi ({termo})", r.status_code, len(amazon.extrair(r.text)))
+def curl(url):
     saida = subprocess.run(
-        ["curl", "-s", "-L", "--compressed", f"https://www.amazon.com.br/s?k={termo}&i=grocery",
-         "-H", f"User-Agent: {UA}", "-H", "Accept-Language: pt-BR,pt;q=0.9",
-         "-H", "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-         "-w", "\n%{http_code}"], capture_output=True, text=True)
-    corpo, _, status = saida.stdout.rpartition("\n")
-    relatar(f"Amazon curl ({termo})", status, len(amazon.extrair(corpo)))
+        ["curl", "-s", "-L", "--compressed", url, "-H", f"User-Agent: {UA}", "-H", "Accept-Language: pt-BR,pt;q=0.9",
+         "-H", "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "-w", "\n%{http_code} %{url_effective}"],
+        capture_output=True, text=True)
+    corpo, _, fim = saida.stdout.rpartition("\n")
+    return corpo, fim
+
+
+for termo in ["arroz", "detergente", "cafe-pilao"]:
+    corpo, fim = curl(f"https://lista.mercadolivre.com.br/{termo}")
+    print(f"ML curl ({termo}): {fim[:90]} | {len(corpo)} bytes | polycards {corpo.count('\"polycard\":')} "
+          f"| supermercado {corpo.count('\"flow_type\":\"supermarket\"')} | verificação {'account-verification' in fim + corpo[:3000]} "
+          f"| extraídos {len(mercado_livre.extrair(corpo))}", flush=True)
+    titulo = re.search(r"<title>(.*?)</title>", corpo)
+    print("   título:", titulo.group(1)[:80] if titulo else None)
