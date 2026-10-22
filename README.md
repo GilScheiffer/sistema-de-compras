@@ -48,7 +48,10 @@ e `SUPABASE_ACCESS_TOKEN`. No GitHub, os robôs leem `SUPABASE_URL` e `SUPABASE_
 
 | Loja | Situação | Como |
 | --- | --- | --- |
-| Pão de Açúcar | ✅ diário | API de busca do site (loja Icaraí, atende Niterói/SG) |
-| Guanabara | próximo | encarte semanal (imagens) lido pelo Claude Code + notas fiscais |
-| Mercado Livre | depois | site/API |
-| Amazon, Shopee | depois | lista fixa de produtos |
+| Pão de Açúcar | ✅ diário | API de busca do site, loja do Multicenter Itaipu (`storeId` 2272) |
+| Guanabara | ✅ diário* | imagens do encarte lidas pelo Claude Code (`claude -p`), uma vez por página |
+| Amazon | ✅ diário | página de busca via `curl` (a Amazon recusa clientes HTTP do Python) |
+| Mercado Livre | aguardando app | o site bloqueia servidores e a busca pública da API dá 403; o caminho é `/products/search` com token de app |
+| Shopee | — | requisições assinadas e anti-robô pesado |
+
+\* Precisa do secret `CLAUDE_CODE_OAUTH_TOKEN` (gerado com `claude setup-token`); sem ele o job do Guanabara é pulado.
