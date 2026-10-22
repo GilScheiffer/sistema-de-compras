@@ -94,7 +94,7 @@ export async function salvarCondicoes(casa: Casa, condicoes: Record<string, bool
 }
 
 export async function salvarItem(item: ItemCasa) {
-  checar(await supabase.from("itens_casa").upsert(item, { onConflict: "casa_id,catalogo_id", defaultToNull: false }));
+  checar(await supabase.from("itens_casa").upsert(item, { onConflict: "casa_id,catalogo_id" }));
 }
 
 export async function removerItem(casaId: string, catalogoId: string) {
