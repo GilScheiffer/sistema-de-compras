@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/calculo.test.ts","./src/calculo.ts","./src/dados.ts","./src/formato.ts","./src/main.tsx","./src/supabase.ts","./src/tipos.ts","./src/telas/casaajustes.tsx","./src/telas/itens.tsx","./src/telas/login.tsx","./src/telas/plano.tsx","./src/telas/precos.tsx","./src/telas/semcasa.tsx"],"version":"5.6.3"}
