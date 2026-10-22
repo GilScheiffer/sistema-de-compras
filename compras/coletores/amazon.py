@@ -1,16 +1,17 @@
 """Busca na Amazon Brasil pela página de resultados.
 
-A Amazon bloqueia robôs com frequência (resposta 503 ou captcha). Nesses casos a busca devolve
-vazio em vez de quebrar a coleta, e os preços anteriores continuam valendo por alguns dias.
+Usa o curl do sistema: a Amazon recusa (503) clientes HTTP do Python pela "impressão digital"
+da conexão, mas aceita o curl, inclusive a partir do GitHub Actions. Se mesmo assim bloquear,
+a busca falha e os preços anteriores continuam valendo por alguns dias.
 """
 
 from __future__ import annotations
 
 import html
 import re
+import subprocess
 import time
-
-import httpx
+from urllib.parse import urlencode
 
 from compras.coletores import ProdutoColetado
 
@@ -23,6 +24,7 @@ _HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
     "Accept-Language": "pt-BR,pt;q=0.9,en;q=0.8",
+    "Accept-Encoding": "gzip, deflate, br",
     "Upgrade-Insecure-Requests": "1",
     "Sec-Fetch-Dest": "document",
     "Sec-Fetch-Mode": "navigate",
@@ -35,23 +37,35 @@ class Bloqueado(Exception):
     """A Amazon recusou a requisição (anti-robô)."""
 
 
+def _curl(url: str) -> tuple[int, str]:
+    cabecalhos = [arg for k, v in _HEADERS.items() for arg in ("-H", f"{k}: {v}")]
+    saida = subprocess.run(
+        ["curl", "-s", "-L", "--compressed", "--max-time", "30", *cabecalhos, "-w", "\n%{http_code}", url],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    )
+    corpo, _, status = saida.stdout.rpartition("\n")
+    return int(status or 0), corpo
+
+
 class Cliente:
     def __init__(self):
-        self.http = httpx.Client(headers=_HEADERS, timeout=30, follow_redirects=True)
         self._ultima = 0.0
 
     def buscar(self, termo: str, pagina: int = 1) -> tuple[list[ProdutoColetado], int]:
-        espera = PAUSA - (time.monotonic() - self._ultima)
-        if espera > 0:
-            time.sleep(espera)
         params = {"k": termo, "i": "grocery"} | ({"page": str(pagina)} if pagina > 1 else {})
         for tentativa in range(3):
-            r = self.http.get(URL_BUSCA, params=params)
+            espera = PAUSA - (time.monotonic() - self._ultima)
+            if espera > 0:
+                time.sleep(espera)
+            status, corpo = _curl(f"{URL_BUSCA}?{urlencode(params)}")
             self._ultima = time.monotonic()
-            if r.status_code == 200 and "captcha" not in r.text[:5000].lower():
-                return extrair(r.text), PAGINAS
+            if status == 200 and "captcha" not in corpo[:5000].lower():
+                return extrair(corpo), PAGINAS
             time.sleep(10 * (tentativa + 1))
-        raise Bloqueado(f"HTTP {r.status_code}")
+        raise Bloqueado(f"HTTP {status}")
 
 
 _RE_BLOCO = re.compile(r'(?=<div[^>]+data-component-type="s-search-result")')

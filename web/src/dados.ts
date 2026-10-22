@@ -25,7 +25,11 @@ async function produtosRecentes(): Promise<Produto[]> {
         .range(inicio, inicio + PAGINA - 1),
     ) as Produto[];
     todos.push(...pagina);
-    if (pagina.length < PAGINA) return todos;
+    if (pagina.length < PAGINA) {
+      // Oferta de encarte com validade vencida não vale mais, mesmo que o robô ainda a tenha visto.
+      const hoje = new Date().toISOString().slice(0, 10);
+      return todos.filter((p) => !p.promocao?.fim || p.promocao.fim.slice(0, 10) >= hoje);
+    }
   }
 }
 

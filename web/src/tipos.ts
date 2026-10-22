@@ -32,6 +32,8 @@ export interface Promocao {
   leve?: number;
   pague?: number;
   so_app?: boolean;
+  origem?: "encarte";
+  obs?: string;
 }
 
 export interface Produto {

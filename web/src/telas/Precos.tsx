@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { ofertasDoItem, type Oferta } from "../calculo";
 import type { Dados } from "../dados";
 import { brl, data, qtd } from "../formato";
-import type { ItemCatalogo } from "../tipos";
+import type { ItemCatalogo, Produto } from "../tipos";
 
 export default function Precos({ dados, irParaItens }: { dados: Dados; irParaItens: () => void }) {
   const [filtro, setFiltro] = useState<"todos" | "promo">("todos");
@@ -18,7 +18,7 @@ export default function Precos({ dados, irParaItens }: { dados: Dados; irParaIte
         .sort((a, b) => a.item.categoria.localeCompare(b.item.categoria) || a.item.nome.localeCompare(b.item.nome)),
     [dados, catalogo, condicoes],
   );
-  const emPromo = linhas.filter((l) => l.ofertas[0]?.produto.preco_regular);
+  const emPromo = linhas.filter((l) => l.ofertas[0] && emPromocao(l.ofertas[0].produto));
   const visiveis = filtro === "promo" ? emPromo : linhas;
 
   if (linhas.length === 0) {
@@ -45,6 +45,10 @@ export default function Precos({ dados, irParaItens }: { dados: Dados; irParaIte
       ))}
     </section>
   );
+}
+
+function emPromocao(p: Produto): boolean {
+  return !!p.preco_regular || p.promocao?.origem === "encarte";
 }
 
 function CartaoItem({
@@ -131,6 +135,10 @@ function LinhaOferta({
             🔥 -{pct}% (de {brl(p.preco_regular)}){p.promocao?.fim && ` até ${data(p.promocao.fim)}`}
           </span>
         )}
+        {!p.preco_regular && p.promocao?.origem === "encarte" && (
+          <span className="selo promo">📰 encarte{p.promocao.fim && ` até ${data(p.promocao.fim)}`}</span>
+        )}
+        {p.promocao?.obs && <span className="selo">{p.promocao.obs}</span>}
         {p.promocao?.leve && p.promocao?.pague && (
           <span className="selo promo">
             leve {p.promocao.leve} pague {p.promocao.pague}

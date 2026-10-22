@@ -551,7 +551,7 @@ categoria = "Limpeza"
 unidade = "L"
 busca = "lava roupas liquido"
 comeca = ["sabao", "lava roupas"]
-incluir = ["sabao|lava roupas", "liquido"]
+incluir = ["sabao|lava roupas"]  # a unidade (litros) já separa do sabão em pó
 excluir = ["louca", "loucas", "maos", "detergente", "intimo", "bebe"]
 
 [[item]]
@@ -631,7 +631,7 @@ unidade = "un"
 busca = "papel higienico"
 comeca = ["papel higienico"]
 incluir = ["papel", "higienico"]
-excluir = ["umedecido", "lenco"]
+excluir = ["umedecido", "lenco", "institucional", "rolao"]
 
 [[item]]
 id = "papel-toalha"
@@ -745,7 +745,7 @@ categoria = "Bebidas"
 unidade = "L"
 busca = "refrigerante cola"
 comeca = ["refrigerante"]
-incluir = ["refrigerante", "cola"]
+incluir = ["refrigerante", "cola|coca|pepsi"]
 excluir = ["zero", "sem acucar", "diet", "light"]
 
 [[item]]

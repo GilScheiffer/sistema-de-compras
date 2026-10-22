@@ -70,7 +70,9 @@ export default function Plano({ dados, irParaItens }: { dados: Dados; irParaIten
                         · {o.pacotes}× {o.produto.descricao} ({qtd(o.produto.quantidade, item.unidade)})
                       </span>
                       {o.ajustes.length > 0 && <span className="selo desconto">{o.ajustes.join(", ")}</span>}
-                      {o.produto.preco_regular && <span className="selo promo">promo</span>}
+                      {(o.produto.preco_regular || o.produto.promocao?.origem === "encarte") && (
+                        <span className="selo promo">promo</span>
+                      )}
                     </span>
                     <span>{brl(o.custo)}</span>
                   </li>

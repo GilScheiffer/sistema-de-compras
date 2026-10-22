@@ -37,14 +37,17 @@ class Supabase:
             raise RuntimeError(f"Supabase {r.status_code} em {r.request.method} {r.request.url.path}: {r.text}")
         return r
 
-    def select(self, tabela: str, **filtros: str) -> list[dict]:
-        """Lê todas as linhas que batem com os filtros (ex.: loja_id='eq.guanabara'), paginando."""
+    def select(self, tabela: str, colunas: str = "*", ordem: str | None = None, **filtros: str) -> list[dict]:
+        """Lê todas as linhas que batem com os filtros (ex.: loja_id='eq.guanabara'), paginando.
+
+        Em tabelas grandes, passe `ordem` (uma coluna única) para a paginação ser estável.
+        """
         linhas, inicio = [], 0
         while True:
             r = self._checar(
                 self.http.get(
                     f"/{tabela}",
-                    params={"select": "*", **filtros},
+                    params={"select": colunas, **({"order": ordem} if ordem else {}), **filtros},
                     headers={"Range": f"{inicio}-{inicio + PAGINA - 1}"},
                 )
             )

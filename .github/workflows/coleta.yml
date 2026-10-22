@@ -1,0 +1,49 @@
+name: Coleta de preços
+
+on:
+  schedule:
+    - cron: "0 9 * * *"  # 06:00 em Brasília
+  workflow_dispatch:
+    inputs:
+      loja:
+        description: "Só uma loja (vazio = todas)"
+        required: false
+
+concurrency:
+  group: coleta-${{ github.event.inputs.loja || 'todas' }}
+  cancel-in-progress: false
+
+jobs:
+  coletar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        loja: [pao_de_acucar, amazon, guanabara]
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+    steps:
+      - name: Pular?
+        id: pular
+        run: |
+          if [ -n "${{ github.event.inputs.loja }}" ] && [ "${{ github.event.inputs.loja }}" != "${{ matrix.loja }}" ]; then
+            echo "sim=true" >> "$GITHUB_OUTPUT"; echo "Outra loja foi pedida."
+          elif [ "${{ matrix.loja }}" = "guanabara" ] && [ -z "$CLAUDE_CODE_OAUTH_TOKEN" ]; then
+            echo "sim=true" >> "$GITHUB_OUTPUT"; echo "::warning::Guanabara precisa do secret CLAUDE_CODE_OAUTH_TOKEN (rode 'claude setup-token')."
+          fi
+      - if: steps.pular.outputs.sim != 'true'
+        uses: actions/checkout@v4
+      - if: steps.pular.outputs.sim != 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - if: steps.pular.outputs.sim != 'true' && matrix.loja == 'guanabara'
+        run: npm install -g @anthropic-ai/claude-code
+      - if: steps.pular.outputs.sim != 'true'
+        run: pip install -e .
+      - if: steps.pular.outputs.sim != 'true'
+        run: python -m compras.coletar ${{ matrix.loja }}

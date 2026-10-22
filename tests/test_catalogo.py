@@ -56,3 +56,28 @@ def test_catalogo_valido():
     for item in ITENS.values():
         assert item.unidade in ("kg", "L", "un"), item.id
         assert item.comeca, f"{item.id} sem 'comeca'"
+
+
+MARCAS = catalogo.Marcas(["TIO JOÃO", "Tio", "3 CORAÇÕES", "QUALITÁ", "Personal"])
+
+
+@pytest.mark.parametrize(
+    "item, descricao, esperado",
+    [
+        ("arroz-parboilizado", "Tio João Arroz Parboilizado - 5Kg", 5),
+        ("cafe-po", "3 Corações Café Torrado E Moído Tradicional Pacote 500G", 0.5),
+        ("papel-higienico", "Personal Papel Higiênico Vip Folha Tripla Com 12 Rolos De 20M", 12),
+        ("refrigerante-cola", "Refrigerante Pepsi 2.25L", 2.25),
+        ("sabao-liquido", "Lava-Roupas Suprema 5L", 5),
+        ("papel-higienico", "Papel Higienico Rolão Institucional Com 08 Rolos 300 Metros", None),
+    ],
+)
+def test_reconhece_com_marca_no_inicio(item, descricao, esperado):
+    q = ITENS[item].reconhece(descricao, marcas=MARCAS)
+    assert (q.valor if q else None) == (pytest.approx(esperado) if esperado else None)
+
+
+def test_encontra_marca_mais_longa():
+    assert MARCAS.encontrar("Tio João Arroz Parboilizado 5kg") == "TIO JOÃO"
+    assert MARCAS.encontrar("Café Torrado 3 Corações 500g") == "3 CORAÇÕES"
+    assert MARCAS.encontrar("Arroz Branco Urbano 1kg") is None

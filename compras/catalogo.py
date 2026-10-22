@@ -25,10 +25,18 @@ class ItemCatalogo:
     comeca: list[str] = field(default_factory=list)  # o nome precisa começar por um destes
     padrao: float | None = None  # quantidade assumida quando o nome não diz (ex.: escova = 1 un)
 
-    def reconhece(self, descricao: str, marca: str | None = None) -> unidades.Quantidade | None:
-        """Quantidade do produto se a descrição for deste item, senão None."""
+    def reconhece(
+        self, descricao: str, marca: str | None = None, marcas: "Marcas | None" = None
+    ) -> unidades.Quantidade | None:
+        """Quantidade do produto se a descrição for deste item, senão None.
+
+        `marcas` permite reconhecer nomes que começam pela marca ("Tio João Arroz Branco 5kg").
+        """
         texto = normalizar(descricao)
-        if self.comeca and not any(_comeca(_sem_marca(texto, marca), c) for c in self.comeca):
+        inicio = _sem_marca(texto, marca)
+        if marcas:
+            inicio = marcas.sem_prefixo(inicio)
+        if self.comeca and not any(_comeca(inicio, c) for c in self.comeca):
             return None
         if not all(any(_tem(texto, alt) for alt in termo.split("|")) for termo in self.incluir):
             return None
@@ -63,6 +71,33 @@ def _sem_marca(texto: str, marca: str | None) -> str:
         if texto.startswith(m + " "):
             return texto[len(m) + 1 :]
     return texto
+
+
+class Marcas:
+    """Marcas conhecidas (vindas das lojas que informam a marca), para lojas que não informam."""
+
+    def __init__(self, nomes):
+        unicas = {normalizar(n): n for n in nomes if n and len(normalizar(n)) >= 2}
+        self._ordem = sorted(unicas, key=len, reverse=True)  # "tio joao" antes de "tio"
+        self._original = unicas
+        self._re = re.compile(r"\b(" + "|".join(re.escape(m) for m in self._ordem) + r")\b") if unicas else None
+
+    def sem_prefixo(self, texto: str) -> str:
+        """Tira uma marca do início: 'tio joao arroz branco' -> 'arroz branco'."""
+        for m in self._ordem:
+            if texto.startswith(m + " "):
+                return texto[len(m) + 1 :]
+        return texto
+
+    def encontrar(self, descricao: str) -> str | None:
+        """Primeira marca conhecida que aparece no nome (a mais longa, se houver empate de posição)."""
+        if not self._re:
+            return None
+        achadas = list(self._re.finditer(normalizar(descricao)))
+        if not achadas:
+            return None
+        primeira = min(achadas, key=lambda m: (m.start(), -len(m.group(1))))
+        return self._original[primeira.group(1)]
 
 
 def carregar(caminho: Path = ARQUIVO) -> list[ItemCatalogo]:

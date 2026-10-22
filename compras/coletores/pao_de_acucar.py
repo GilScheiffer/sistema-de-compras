@@ -12,9 +12,9 @@ from compras.texto import normalizar
 LOJA_ID = "pao_de_acucar"
 URL_BUSCA = "https://api.vendas.gpa.digital/pa/search/search"
 URL_IMAGEM = "https://static.paodeacucar.com"
-# Loja que atende Niterói/São Gonçalo (Icaraí). Descoberta via
-# api.vendas.gpa.digital/pa/delivery-v2/ecom/deliveryOptions?zipCode=24020000
-STORE_ID = 1265
+# Loja do Multicenter Itaipu (Niterói), escolhida pelo casal. Descoberta via
+# api.vendas.gpa.digital/pa/delivery-v2/ecom/deliveryOptions?zipCode=24340000
+STORE_ID = 2272
 POR_PAGINA = 40
 PAUSA = 0.7  # segundos entre requisições, para não sobrecarregar o site
 
