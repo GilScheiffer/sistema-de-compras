@@ -34,17 +34,22 @@ _UNIDADES = {
     "unidades": ("un", 1.0),
     "rolo": ("un", 1.0),
     "rolos": ("un", 1.0),
-    "folhas": ("un", 1.0),
     "sachês": ("un", 1.0),
     "saches": ("un", 1.0),
     "cápsulas": ("un", 1.0),
     "capsulas": ("un", 1.0),
+    "peças": ("un", 1.0),
+    "pecas": ("un", 1.0),
+    "peça": ("un", 1.0),
+    "peca": ("un", 1.0),
+    "pec": ("un", 1.0),
 }
 
 _NUM = r"\d+(?:[.,]\d+)?"
 _NOMES = "|".join(re.escape(u) for u in sorted(_UNIDADES, key=len, reverse=True))
 _RE_QTD = re.compile(rf"(?:(\d+)\s*x\s*)?({_NUM})\s*({_NOMES})(?![a-zà-ú])", re.IGNORECASE)
-_RE_PACK = re.compile(r"(?:c/|com|pack|kit|leve)\s*(\d+)(?!\s*[.,]?\d)", re.IGNORECASE)
+_RE_LEVE_PAGUE = re.compile(r"\bleve\s*(\d+)\s*pague\s*\d+", re.IGNORECASE)
+_RE_PACK = re.compile(r"(?:\bc/|\bcom|\bpack|\bkit|\bleve)\s*(\d+)(?![.,]?\d)", re.IGNORECASE)
 
 
 @dataclass(frozen=True)
@@ -65,16 +70,35 @@ def unidade_base(nome: str) -> str:
     raise ErroCompras(f"Unidade desconhecida: {nome!r} (use kg, g, L, ml ou un)")
 
 
-def extrair(texto: str) -> Quantidade | None:
-    """Encontra a quantidade dentro de uma descrição de produto. None se não achar."""
-    m = _RE_QTD.search(texto)
-    if not m:
+def extrair(texto: str, preferir: str | None = None) -> Quantidade | None:
+    """Encontra a quantidade dentro de uma descrição de produto. None se não achar.
+
+    `preferir` escolhe entre várias quantidades: em "Saco de lixo 30L c/ 50 unidades",
+    preferir="un" devolve 50 un em vez de 30 L.
+    """
+    encontrados = list(_RE_QTD.finditer(texto))
+    if preferir:
+        encontrados = [m for m in encontrados if _UNIDADES[m.group(3).lower()][0] == preferir] or encontrados
+    if preferir == "un" and (leve := _RE_LEVE_PAGUE.search(texto)):
+        return Quantidade(int(leve.group(1)), "un")  # "Leve 12 Pague 11": vêm 12
+    if preferir == "un" and not any(_UNIDADES[m.group(3).lower()][0] == "un" for m in encontrados):
+        # "Ovos c/20", "Saco de lixo 50L com 50": a contagem vem sem unidade escrita
+        if pack := _RE_PACK.search(texto):
+            return Quantidade(int(pack.group(1)), "un")
+        if re.search(r"\bd[uú]zia\b", texto, re.IGNORECASE):
+            return Quantidade(12, "un")
+    if not encontrados:
         return None
+    m = encontrados[0]
     multiplicador, numero, nome = m.groups()
     base, fator = _UNIDADES[nome.lower()]
     valor = _num(numero) * fator
+    contagens = [c for c in _RE_QTD.finditer(texto) if _UNIDADES[c.group(3).lower()][0] == "un"]
     if multiplicador:
         valor *= int(multiplicador)
+    elif base != "un" and contagens and re.search(r"\bcada\b", texto, re.IGNORECASE):
+        # "Pack 6 Unidades 500ml Cada" -> 6 x 500ml
+        valor *= _num(contagens[0].group(2))
     elif base != "un":
         # "lata 350ml c/12" -> 12 x 350ml
         for pack in _RE_PACK.finditer(texto):

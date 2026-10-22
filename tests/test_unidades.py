@@ -16,10 +16,12 @@ from compras.unidades import Quantidade, extrair, formatar, ler
         ("Cerveja 6x350ml", Quantidade(2.1, "L")),
         ("Cerveja Lata 350ml c/12", Quantidade(4.2, "L")),
         ("Detergente Ypê 500ml", Quantidade(0.5, "L")),
+        ("Pack Lava-louças Ypê Squeeze 6 Unidades 500ml Cada", Quantidade(3, "L")),
+        ("Iogurte Natural Nestlé Bandeja 340g 4 Unidades", Quantidade(0.34, "kg")),
     ],
 )
 def test_extrair(texto, esperado):
-    assert extrair(texto) == esperado
+    assert extrair(texto, preferir=esperado.unidade) == esperado
 
 
 def test_extrair_sem_quantidade():

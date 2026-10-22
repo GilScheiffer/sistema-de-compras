@@ -1,0 +1,769 @@
+# Catálogo de itens genéricos (o que aparece no onboarding).
+#
+# busca:   o que o robô digita na busca da loja
+# incluir: TODOS os termos precisam aparecer no nome do produto ("a|b" = a OU b)
+# excluir: NENHUM desses termos pode aparecer
+# Os termos são comparados sem acento e como palavras inteiras.
+# A unidade também filtra: um item em kg nunca casa com produto em litros.
+
+# ---------------------------------------------------------------- Mercearia
+
+[[item]]
+id = "arroz-branco"
+nome = "Arroz branco"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "arroz"
+comeca = ["arroz"]
+incluir = ["arroz"]
+excluir = ["integral", "parboilizado", "arboreo", "arborio", "risoto", "graos", "quinoa", "organico", "cateto", "japones", "negro", "vermelho", "jasmim", "basmati", "cereais", "pronto", "biju", "carreteiro galinha", "cozinha", "carnaroli", "canaroli", "selvagem", "sasanishiki", "oriental", "caramelizado", "aromatico"]
+
+[[item]]
+id = "arroz-parboilizado"
+nome = "Arroz parboilizado"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "arroz parboilizado"
+comeca = ["arroz"]
+incluir = ["arroz", "parboilizado"]
+excluir = ["integral", "organico", "pronto"]
+
+[[item]]
+id = "arroz-integral"
+nome = "Arroz integral"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "arroz integral"
+comeca = ["arroz"]
+incluir = ["arroz", "integral"]
+excluir = ["graos", "cereais", "quinoa", "parboilizado", "pronto", "biscoito", "cozido", "vapor"]
+
+[[item]]
+id = "feijao-preto"
+nome = "Feijão preto"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "feijao preto"
+comeca = ["feijao"]
+incluir = ["feijao", "preto"]
+excluir = ["pronto", "cozido", "lata", "tropeiro", "feijoada", "caldo", "tempero", "congelado"]
+
+[[item]]
+id = "feijao-carioca"
+nome = "Feijão carioca"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "feijao carioca"
+comeca = ["feijao"]
+incluir = ["feijao", "carioca"]
+excluir = ["pronto", "cozido", "lata", "tropeiro", "caldo", "tempero", "congelado"]
+
+[[item]]
+id = "acucar-refinado"
+nome = "Açúcar refinado"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "acucar"
+comeca = ["acucar"]
+incluir = ["acucar", "refinado"]
+excluir = ["confeiteiro", "mascavo", "demerara", "organico", "light", "adocante"]
+
+[[item]]
+id = "acucar-cristal"
+nome = "Açúcar cristal"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "acucar cristal"
+comeca = ["acucar"]
+incluir = ["acucar", "cristal"]
+excluir = ["organico", "demerara", "mascavo"]
+
+[[item]]
+id = "sal"
+nome = "Sal refinado"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "sal"
+comeca = ["sal"]
+incluir = ["sal"]
+excluir = ["grosso", "rosa", "parrilla", "light", "temperado", "ervas", "marinho", "flor", "himalaia", "biscoito", "amendoim", "churrasco"]
+
+[[item]]
+id = "cafe-po"
+nome = "Café em pó"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "cafe"
+comeca = ["cafe"]
+incluir = ["cafe", "torrado|moido"]
+excluir = ["capsula", "capsulas", "soluvel", "graos", "grao", "filtro", "cappuccino", "descafeinado"]
+
+[[item]]
+id = "oleo-soja"
+nome = "Óleo de soja"
+categoria = "Mercearia"
+unidade = "L"
+busca = "oleo de soja"
+comeca = ["oleo de soja"]
+incluir = ["oleo", "soja"]
+
+[[item]]
+id = "azeite"
+nome = "Azeite de oliva"
+categoria = "Mercearia"
+unidade = "L"
+busca = "azeite"
+comeca = ["azeite"]
+incluir = ["azeite"]
+excluir = ["spray", "tempero", "temperado", "azeitona", "azeitonas", "dende", "trufas", "trufa"]
+
+[[item]]
+id = "macarrao-espaguete"
+nome = "Macarrão espaguete"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "espaguete"
+comeca = ["macarrao", "massa"]
+incluir = ["espaguete|spaghetti"]
+excluir = ["integral", "instantaneo", "arroz", "sem gluten", "molho"]
+
+[[item]]
+id = "macarrao-parafuso"
+nome = "Macarrão parafuso"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "parafuso"
+comeca = ["macarrao", "massa"]
+incluir = ["parafuso|fusilli"]
+excluir = ["integral", "sem gluten", "arroz"]
+
+[[item]]
+id = "macarrao-instantaneo"
+nome = "Macarrão instantâneo"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "macarrao instantaneo"
+comeca = ["macarrao", "pack macarrao"]
+incluir = ["instantaneo|lamen|miojo"]
+excluir = ["copo", "cup"]
+
+[[item]]
+id = "farinha-trigo"
+nome = "Farinha de trigo"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "farinha de trigo"
+comeca = ["farinha"]
+incluir = ["farinha", "trigo"]
+excluir = ["integral", "mistura", "bolo", "rosca", "kibe", "quibe"]
+
+[[item]]
+id = "farinha-mandioca"
+nome = "Farinha de mandioca"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "farinha de mandioca"
+comeca = ["farinha"]
+incluir = ["farinha", "mandioca"]
+excluir = ["farofa", "temperada", "pronta", "tapioca"]
+
+[[item]]
+id = "fuba"
+nome = "Fubá"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "fuba"
+comeca = ["fuba"]
+incluir = ["fuba"]
+excluir = ["bolo", "mistura", "biscoito"]
+
+[[item]]
+id = "milho-pipoca"
+nome = "Milho de pipoca"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "milho de pipoca"
+comeca = ["milho"]
+incluir = ["milho", "pipoca"]
+excluir = ["micro", "microondas", "pronta", "doce", "caramelizada"]
+
+[[item]]
+id = "pipoca-microondas"
+nome = "Pipoca de micro-ondas"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "pipoca"
+comeca = ["pipoca", "milho de pipoca"]
+incluir = ["pipoca", "micro|microondas"]
+
+[[item]]
+id = "amido-milho"
+nome = "Amido de milho"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "amido de milho"
+comeca = ["amido"]
+incluir = ["amido", "milho"]
+excluir = ["biscoito", "mingau"]
+
+[[item]]
+id = "molho-tomate"
+nome = "Molho de tomate"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "molho de tomate"
+comeca = ["molho"]
+incluir = ["molho", "tomate"]
+excluir = ["extrato", "ketchup", "pizza", "pimenta"]
+
+[[item]]
+id = "extrato-tomate"
+nome = "Extrato de tomate"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "extrato de tomate"
+comeca = ["extrato"]
+incluir = ["extrato", "tomate"]
+
+[[item]]
+id = "milho-verde"
+nome = "Milho verde em conserva"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "milho verde"
+comeca = ["milho"]
+incluir = ["milho", "verde"]
+excluir = ["pipoca", "creme", "espiga", "congelado", "ervilha", "seleta", "salada"]
+
+[[item]]
+id = "ervilha"
+nome = "Ervilha em conserva"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "ervilha"
+comeca = ["ervilha"]
+incluir = ["ervilha"]
+excluir = ["congelada", "seca", "milho", "seleta", "salada", "partida"]
+
+[[item]]
+id = "atum"
+nome = "Atum em lata"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "atum"
+comeca = ["atum", "file de atum"]
+incluir = ["atum"]
+excluir = ["pate", "pasta", "patê", "racao", "gato", "salada"]
+
+[[item]]
+id = "sardinha"
+nome = "Sardinha em lata"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "sardinha"
+comeca = ["sardinha", "file de sardinha"]
+incluir = ["sardinha"]
+excluir = ["pate", "racao", "gato", "congelada"]
+
+[[item]]
+id = "maionese"
+nome = "Maionese"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "maionese"
+comeca = ["maionese"]
+incluir = ["maionese"]
+excluir = ["temperada", "salada", "vegana"]
+
+[[item]]
+id = "ketchup"
+nome = "Ketchup"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "ketchup"
+comeca = ["ketchup"]
+incluir = ["ketchup"]
+
+[[item]]
+id = "mostarda"
+nome = "Mostarda"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "mostarda"
+comeca = ["mostarda"]
+incluir = ["mostarda"]
+excluir = ["semente", "graos", "folha", "dijon"]
+
+[[item]]
+id = "vinagre"
+nome = "Vinagre"
+categoria = "Mercearia"
+unidade = "L"
+busca = "vinagre"
+comeca = ["vinagre"]
+incluir = ["vinagre"]
+excluir = ["balsamico", "maca", "arroz", "vinho"]
+
+[[item]]
+id = "leite-condensado"
+nome = "Leite condensado"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "leite condensado"
+comeca = ["leite condensado"]
+incluir = ["condensado"]
+excluir = ["cozido", "doce de leite", "bisnaga sabor"]
+
+[[item]]
+id = "creme-leite"
+nome = "Creme de leite"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "creme de leite"
+comeca = ["creme de leite"]
+incluir = ["creme de leite"]
+excluir = ["condensado", "fresco", "chantilly", "culinario vegetal"]
+
+[[item]]
+id = "achocolatado"
+nome = "Achocolatado em pó"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "achocolatado"
+comeca = ["achocolatado"]
+incluir = ["achocolatado|nescau|toddy"]
+excluir = ["liquido", "bebida", "pronto", "biscoito", "cereal", "barra", "capsula"]
+
+[[item]]
+id = "aveia"
+nome = "Aveia em flocos"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "aveia"
+comeca = ["aveia"]
+incluir = ["aveia"]
+excluir = ["barra", "biscoito", "cookie", "granola", "bebida", "mingau", "farelo"]
+
+[[item]]
+id = "biscoito-cream-cracker"
+nome = "Biscoito cream cracker"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "cream cracker"
+comeca = ["biscoito", "bolacha"]
+incluir = ["cream cracker"]
+excluir = ["integral"]
+
+[[item]]
+id = "biscoito-maizena"
+nome = "Biscoito maizena"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "biscoito maizena"
+comeca = ["biscoito", "bolacha"]
+incluir = ["biscoito|bolacha", "maizena|maisena"]
+
+[[item]]
+id = "biscoito-recheado"
+nome = "Biscoito recheado"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "biscoito recheado"
+comeca = ["biscoito", "bolacha"]
+incluir = ["biscoito|bolacha", "recheado"]
+
+[[item]]
+id = "cereal-matinal"
+nome = "Cereal matinal"
+categoria = "Mercearia"
+unidade = "kg"
+busca = "cereal matinal"
+comeca = ["cereal matinal"]
+incluir = ["cereal"]
+excluir = ["barra", "farinha", "infantil", "mingau", "arroz"]
+
+[[item]]
+id = "pao-forma"
+nome = "Pão de forma"
+categoria = "Padaria"
+unidade = "kg"
+busca = "pao de forma"
+comeca = ["pao de forma"]
+incluir = ["pao", "forma"]
+excluir = ["mistura", "farinha", "torrada", "sem gluten"]
+
+# ---------------------------------------------------------------- Laticínios e frios
+
+[[item]]
+id = "leite-integral"
+nome = "Leite integral"
+categoria = "Laticínios"
+unidade = "L"
+busca = "leite integral"
+comeca = ["leite"]
+incluir = ["leite", "integral"]
+excluir = ["po", "condensado", "lactose", "fermentado", "achocolatado", "coco", "aveia", "amendoas", "soja", "bebida", "iogurte", "biscoito"]
+
+[[item]]
+id = "leite-desnatado"
+nome = "Leite desnatado"
+categoria = "Laticínios"
+unidade = "L"
+busca = "leite desnatado"
+comeca = ["leite"]
+incluir = ["leite", "desnatado|semidesnatado"]
+excluir = ["po", "condensado", "lactose", "fermentado", "iogurte", "bebida"]
+
+[[item]]
+id = "leite-zero-lactose"
+nome = "Leite zero lactose"
+categoria = "Laticínios"
+unidade = "L"
+busca = "leite zero lactose"
+comeca = ["leite"]
+incluir = ["leite", "lactose"]
+excluir = ["po", "condensado", "creme", "iogurte", "queijo", "manteiga", "requeijao", "bebida", "achocolatado", "fermentado", "doce"]
+
+[[item]]
+id = "leite-po"
+nome = "Leite em pó"
+categoria = "Laticínios"
+unidade = "kg"
+busca = "leite em po"
+comeca = ["leite"]
+incluir = ["leite", "po"]
+excluir = ["condensado", "composto", "infantil", "formula"]
+
+[[item]]
+id = "manteiga"
+nome = "Manteiga"
+categoria = "Laticínios"
+unidade = "kg"
+busca = "manteiga"
+comeca = ["manteiga"]
+incluir = ["manteiga"]
+excluir = ["amendoim", "cacau", "garrafa", "biscoito", "pipoca", "ghee", "karite", "coco", "margarina"]
+
+[[item]]
+id = "margarina"
+nome = "Margarina"
+categoria = "Laticínios"
+unidade = "kg"
+busca = "margarina"
+comeca = ["margarina"]
+incluir = ["margarina"]
+
+[[item]]
+id = "requeijao"
+nome = "Requeijão"
+categoria = "Laticínios"
+unidade = "kg"
+busca = "requeijao"
+comeca = ["requeijao"]
+incluir = ["requeijao"]
+excluir = ["biscoito", "pao", "salgadinho"]
+
+[[item]]
+id = "queijo-mussarela"
+nome = "Queijo muçarela fatiado"
+categoria = "Laticínios"
+unidade = "kg"
+busca = "mussarela"
+comeca = ["queijo"]
+incluir = ["mussarela|mucarela|mozzarella|muzzarela"]
+excluir = ["pizza", "pao", "bufala", "ralado", "palito", "empanado"]
+
+[[item]]
+id = "queijo-ralado"
+nome = "Queijo ralado"
+categoria = "Laticínios"
+unidade = "kg"
+busca = "queijo ralado"
+comeca = ["queijo"]
+incluir = ["queijo", "ralado"]
+
+[[item]]
+id = "presunto"
+nome = "Presunto fatiado"
+categoria = "Laticínios"
+unidade = "kg"
+busca = "presunto"
+comeca = ["presunto"]
+incluir = ["presunto"]
+excluir = ["parma", "cru", "pizza", "pao", "serrano", "espanhol", "pate"]
+
+[[item]]
+id = "iogurte-natural"
+nome = "Iogurte natural"
+categoria = "Laticínios"
+unidade = "kg"
+busca = "iogurte natural"
+comeca = ["iogurte"]
+incluir = ["iogurte", "natural"]
+excluir = ["grego", "sabor", "morango", "polpa", "acai", "banana", "baunilha", "bicamadas", "coco", "cookies", "cranberry", "doce de leite", "pessego", "mel", "tangerina", "frutas", "maracuja"]
+
+[[item]]
+id = "ovos"
+nome = "Ovos"
+categoria = "Laticínios"
+unidade = "un"
+busca = "ovos"
+comeca = ["ovo", "ovos"]
+incluir = ["ovos|ovo"]
+excluir = ["pascoa", "chocolate", "codorna", "macarrao", "massa", "biscoito", "liquido", "po"]
+
+[[item]]
+id = "salsicha"
+nome = "Salsicha"
+categoria = "Carnes"
+unidade = "kg"
+busca = "salsicha"
+comeca = ["salsicha"]
+incluir = ["salsicha"]
+excluir = ["vegana", "vegetal", "lata", "enlatada"]
+
+# ---------------------------------------------------------------- Limpeza
+
+[[item]]
+id = "detergente"
+nome = "Detergente"
+categoria = "Limpeza"
+unidade = "L"
+busca = "detergente"
+comeca = ["detergente", "lava loucas", "pack lava loucas"]
+incluir = ["detergente|lava loucas"]
+excluir = ["maquina", "tablete", "pastilha", "roupa", "roupas", "po", "lava roupas", "sanitario"]
+
+[[item]]
+id = "sabao-po"
+nome = "Sabão em pó"
+categoria = "Limpeza"
+unidade = "kg"
+busca = "lava roupas po"
+comeca = ["sabao", "lava roupas"]
+incluir = ["sabao|lava roupas", "po"]
+excluir = ["louca", "loucas", "maquina de lavar loucas"]
+
+[[item]]
+id = "sabao-liquido"
+nome = "Sabão líquido para roupas"
+categoria = "Limpeza"
+unidade = "L"
+busca = "lava roupas liquido"
+comeca = ["sabao", "lava roupas"]
+incluir = ["sabao|lava roupas", "liquido"]
+excluir = ["louca", "loucas", "maos", "detergente", "intimo", "bebe"]
+
+[[item]]
+id = "amaciante"
+nome = "Amaciante"
+categoria = "Limpeza"
+unidade = "L"
+busca = "amaciante"
+comeca = ["amaciante"]
+incluir = ["amaciante"]
+excluir = ["lenco", "carne"]
+
+[[item]]
+id = "agua-sanitaria"
+nome = "Água sanitária"
+categoria = "Limpeza"
+unidade = "L"
+busca = "agua sanitaria"
+comeca = ["agua sanitaria"]
+incluir = ["agua sanitaria"]
+
+[[item]]
+id = "desinfetante"
+nome = "Desinfetante"
+categoria = "Limpeza"
+unidade = "L"
+busca = "desinfetante"
+comeca = ["desinfetante"]
+incluir = ["desinfetante"]
+excluir = ["lenco", "aerossol", "spray", "pastilha"]
+
+[[item]]
+id = "limpador-multiuso"
+nome = "Limpador multiuso"
+categoria = "Limpeza"
+unidade = "L"
+busca = "limpador multiuso"
+comeca = ["limpador", "multiuso"]
+incluir = ["multiuso"]
+excluir = ["esponja", "pano", "lenco", "refil"]
+
+[[item]]
+id = "alcool"
+nome = "Álcool 70%"
+categoria = "Limpeza"
+unidade = "L"
+busca = "alcool"
+comeca = ["alcool"]
+incluir = ["alcool"]
+excluir = ["gel", "sem alcool", "cerveja", "bebida", "vinho", "lenco"]
+
+[[item]]
+id = "esponja"
+nome = "Esponja de louça"
+categoria = "Limpeza"
+unidade = "un"
+busca = "esponja"
+comeca = ["esponja"]
+incluir = ["esponja"]
+padrao = 1
+excluir = ["banho", "maquiagem", "aco", "inox", "bucha vegetal", "bob esponja"]
+
+[[item]]
+id = "saco-lixo"
+nome = "Saco de lixo"
+categoria = "Limpeza"
+unidade = "un"
+busca = "saco de lixo"
+comeca = ["saco", "sacos"]
+incluir = ["saco|sacos", "lixo"]
+
+[[item]]
+id = "papel-higienico"
+nome = "Papel higiênico"
+categoria = "Limpeza"
+unidade = "un"
+busca = "papel higienico"
+comeca = ["papel higienico"]
+incluir = ["papel", "higienico"]
+excluir = ["umedecido", "lenco"]
+
+[[item]]
+id = "papel-toalha"
+nome = "Papel toalha"
+categoria = "Limpeza"
+unidade = "un"
+busca = "papel toalha"
+comeca = ["papel toalha", "toalha de papel"]
+incluir = ["papel", "toalha"]
+excluir = ["umedecida", "umedecido", "suporte"]
+
+[[item]]
+id = "sabao-barra"
+nome = "Sabão em barra"
+categoria = "Limpeza"
+unidade = "kg"
+busca = "sabao em barra"
+comeca = ["sabao"]
+incluir = ["sabao", "barra"]
+
+# ---------------------------------------------------------------- Higiene
+
+[[item]]
+id = "creme-dental"
+nome = "Creme dental"
+categoria = "Higiene"
+unidade = "kg"
+busca = "creme dental"
+comeca = ["creme dental", "gel dental"]
+incluir = ["creme dental|pasta de dente|gel dental"]
+excluir = ["escova", "kit", "infantil"]
+
+[[item]]
+id = "escova-dente"
+nome = "Escova de dente"
+categoria = "Higiene"
+unidade = "un"
+busca = "escova dental"
+comeca = ["escova"]
+incluir = ["escova", "dente|dental"]
+padrao = 1
+excluir = ["eletrica", "refil", "infantil", "kit"]
+
+[[item]]
+id = "sabonete"
+nome = "Sabonete em barra"
+categoria = "Higiene"
+unidade = "kg"
+busca = "sabonete"
+comeca = ["sabonete"]
+incluir = ["sabonete"]
+excluir = ["liquido", "intimo", "refil", "facial", "infantil", "bebe"]
+
+[[item]]
+id = "shampoo"
+nome = "Shampoo"
+categoria = "Higiene"
+unidade = "L"
+busca = "shampoo"
+comeca = ["shampoo"]
+incluir = ["shampoo"]
+excluir = ["seco", "pet", "caes", "cachorro", "infantil", "kit"]
+
+[[item]]
+id = "condicionador"
+nome = "Condicionador"
+categoria = "Higiene"
+unidade = "L"
+busca = "condicionador"
+comeca = ["condicionador"]
+incluir = ["condicionador"]
+excluir = ["pet", "infantil", "kit", "shampoo"]
+
+[[item]]
+id = "desodorante"
+nome = "Desodorante"
+categoria = "Higiene"
+unidade = "un"
+busca = "desodorante"
+comeca = ["desodorante"]
+incluir = ["desodorante"]
+padrao = 1
+excluir = ["pes", "kit", "ambiente"]
+
+[[item]]
+id = "absorvente"
+nome = "Absorvente"
+categoria = "Higiene"
+unidade = "un"
+busca = "absorvente"
+comeca = ["absorvente"]
+incluir = ["absorvente"]
+excluir = ["protetor de seios", "seios", "kit"]
+
+# ---------------------------------------------------------------- Bebidas
+
+[[item]]
+id = "agua-mineral"
+nome = "Água mineral"
+categoria = "Bebidas"
+unidade = "L"
+busca = "agua mineral"
+comeca = ["agua mineral"]
+incluir = ["agua", "mineral"]
+excluir = ["com gas", "gaseificada", "saborizada", "coco", "tonica"]
+
+[[item]]
+id = "refrigerante-cola"
+nome = "Refrigerante de cola"
+categoria = "Bebidas"
+unidade = "L"
+busca = "refrigerante cola"
+comeca = ["refrigerante"]
+incluir = ["refrigerante", "cola"]
+excluir = ["zero", "sem acucar", "diet", "light"]
+
+[[item]]
+id = "cerveja"
+nome = "Cerveja"
+categoria = "Bebidas"
+unidade = "L"
+busca = "cerveja"
+comeca = ["cerveja"]
+incluir = ["cerveja"]
+excluir = ["sem alcool", "zero", "copo", "kit", "taca"]
+
+[[item]]
+id = "suco-caixa"
+nome = "Suco de caixinha"
+categoria = "Bebidas"
+unidade = "L"
+busca = "suco"
+comeca = ["suco", "nectar"]
+incluir = ["suco|nectar"]
+excluir = ["po", "concentrado", "infantil", "kombucha", "gaseificado"]

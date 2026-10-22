@@ -8,9 +8,9 @@ from compras import ErroCompras
 
 
 def normalizar(texto: str) -> str:
-    """Minúsculas, sem acentos e com espaços simples: 'Qualitá  Arroz' -> 'qualita arroz'."""
+    """Minúsculas, sem acentos, hífen vira espaço: 'Lava-Louças  Qualitá' -> 'lava loucas qualita'."""
     sem_acento = unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode()
-    return " ".join(sem_acento.lower().split())
+    return " ".join(sem_acento.lower().replace("-", " ").split())
 
 
 def ler_dinheiro(texto: str) -> float:
