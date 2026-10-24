@@ -9,8 +9,8 @@ já com os descontos de cada loja (ex.: -20% Qualitá com o cartão Pão de Aç�
 
 ```
 GitHub Actions (todo dia, 6h)          Supabase (Postgres + login)           Site (GitHub Pages)
-  robô Pão de Açúcar  ─────────────▶   catálogo, produtos, histórico  ◀────  onboarding, preços,
-  (próximos: Guanabara, ML, Amazon)    casa, itens escolhidos (RLS)           plano do mês
+  robôs PdA, Amazon,  ─────────────▶   catálogo, produtos, histórico  ◀────  onboarding, preços,
+  ML e Guanabara                       casa, itens escolhidos (RLS)           plano do mês
 ```
 
 - **Catálogo** ([catalogo.toml](catalogo.toml)): itens genéricos ("Arroz branco", "Detergente") com as
@@ -43,6 +43,7 @@ python scripts/sql.py supabase/migrations/0002_seguranca_indices.sql
 
 O `.env` na raiz (fora do git) guarda `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_PROJECT_REF`
 e `SUPABASE_ACCESS_TOKEN`. No GitHub, os robôs leem `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` dos secrets.
+O Mercado Livre usa também `ML_CLIENT_ID` e `ML_CLIENT_SECRET` (app "ComparaPrecosGSx" no DevCenter), no `.env` e nos secrets.
 
 ## Lojas
 
@@ -51,7 +52,7 @@ e `SUPABASE_ACCESS_TOKEN`. No GitHub, os robôs leem `SUPABASE_URL` e `SUPABASE_
 | Pão de Açúcar | ✅ diário | API de busca do site, loja do Multicenter Itaipu (`storeId` 2272) |
 | Guanabara | ✅ diário* | imagens do encarte lidas pelo Claude Code (`claude -p`), uma vez por página |
 | Amazon | ✅ diário | página de busca via `curl` (a Amazon recusa clientes HTTP do Python) |
-| Mercado Livre | aguardando app | o site bloqueia servidores e a busca pública da API dá 403; o caminho é `/products/search` com token de app |
+| Mercado Livre | ✅ diário | API oficial com token do app (`client_credentials`): mais vendidos da categoria + busca no catálogo, só anúncios do ML Supermercado |
 | Shopee | — | requisições assinadas e anti-robô pesado |
 
 \* Precisa do secret `CLAUDE_CODE_OAUTH_TOKEN` (gerado com `claude setup-token`); sem ele o job do Guanabara é pulado.

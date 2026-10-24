@@ -6,7 +6,7 @@ Uso:
     python -m compras.coletar amazon --item cafe-po --teste
     python -m compras.coletar guanabara                 # lê o encarte com o Claude Code
 
-Lojas de "busca" (Pão de Açúcar, Amazon) são pesquisadas item a item. Lojas de "lista"
+Lojas de "busca" (Pão de Açúcar, Amazon, Mercado Livre) são pesquisadas item a item. Lojas de "lista"
 (Guanabara) entregam todas as ofertas de uma vez, e cada uma é comparada com o catálogo.
 """
 
@@ -19,12 +19,12 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 
 from compras import catalogo
-from compras.coletores import ProdutoColetado, amazon, guanabara, pao_de_acucar
+from compras.coletores import ProdutoColetado, amazon, guanabara, mercado_livre, pao_de_acucar
 from compras.supabase import Supabase
 from compras.texto import normalizar
 
 PAGINAS_POR_ITEM = 4
-BUSCA = {"pao_de_acucar": pao_de_acucar, "amazon": amazon}
+BUSCA = {"pao_de_acucar": pao_de_acucar, "amazon": amazon, "mercado_livre": mercado_livre}
 LISTA = {"guanabara": guanabara}
 LOJAS = sorted({*BUSCA, *LISTA})
 
