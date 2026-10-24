@@ -54,7 +54,7 @@ class Cliente:
     def __init__(self):
         self._ultima = 0.0
 
-    def buscar(self, termo: str, pagina: int = 1) -> tuple[list[ProdutoColetado], int]:
+    def buscar(self, termo: str, pagina: int = 1, nome: str | None = None) -> tuple[list[ProdutoColetado], int]:
         params = {"k": termo, "i": "grocery"} | ({"page": str(pagina)} if pagina > 1 else {})
         for tentativa in range(3):
             espera = PAUSA - (time.monotonic() - self._ultima)

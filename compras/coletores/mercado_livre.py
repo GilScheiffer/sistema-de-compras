@@ -11,6 +11,7 @@ Supermercado) com a busca no catálogo filtrada pela categoria de mercado, e peg
 from __future__ import annotations
 
 import time
+from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 
 import httpx
@@ -32,6 +33,7 @@ class Cliente:
         self.http = httpx.Client(base_url=API, timeout=30, limits=httpx.Limits(max_connections=PARALELO))
         self._autenticar()
         self._categorias: dict[str, list[dict]] = {}
+        self._dominios: dict[str, str | None] = {}
         self._dominios_mercado: set[str] = set()  # domínios onde já apareceu anúncio do Supermercado
         self._produtos: dict[str, ProdutoColetado | None] = {}  # produtos já consultados nesta coleta
 
@@ -77,11 +79,14 @@ class Cliente:
             for pid, p in zip(novos, ex.map(lambda i: self._produto(i, dados.get(i)), novos)):
                 self._produtos[pid] = p
 
-    def buscar(self, termo: str, pagina: int = 1) -> tuple[list[ProdutoColetado], int]:
-        """Página 1: mais vendidos das categorias + 1ª página da busca; página 2: resto da busca."""
-        categorias = self._categorias_de(termo)
-        if not categorias:
-            return [], 0
+    def buscar(self, termo: str, pagina: int = 1, nome: str | None = None) -> tuple[list[ProdutoColetado], int]:
+        """Página 1: mais vendidos das categorias + 1ª página da busca; página 2: resto da busca.
+
+        O nome do item ("Macarrão espaguete") também sugere categorias: a sugestão do ML depende de
+        acento e de contexto, e o termo de busca sozinho ("espaguete") às vezes não acha nenhuma.
+        """
+        sugeridas = self._categorias_de(termo) + (self._categorias_de(nome) if nome else [])
+        categorias = list({c["category_id"]: c for c in sugeridas}.values())
         ids: list[str] = []
         if pagina == 1:
             for cat in categorias:
@@ -89,9 +94,13 @@ class Cliente:
                 if r.status_code == 200:
                     ids += [x["id"] for x in r.json().get("content", []) if x.get("type") == "PRODUCT"]
             self._consultar(ids, {})
-        # a busca fica na categoria de mercado: a primeira cujos mais vendidos têm anúncio do Supermercado
-        dominio = next((c["domain_id"] for c in categorias if c["domain_id"] in self._dominios_mercado), None)
-        if dominio:
+        # a busca fica em até duas categorias: a mais comum nos resultados sem filtro ("oleo de soja" →
+        # óleos de cozinha) e a primeira sugerida cujos mais vendidos têm anúncio do Supermercado
+        dominios = {
+            self._dominio_dos_resultados(termo),
+            next((c["domain_id"] for c in categorias if c["domain_id"] in self._dominios_mercado), None),
+        } - {None}
+        for dominio in dominios:
             r = self._get(
                 "/products/search",
                 status="active",
@@ -105,7 +114,14 @@ class Cliente:
             resultados = {p["id"]: p for p in r.json().get("results", [])}
             ids += list(resultados)
             self._consultar(ids, resultados)
-        return [p for i in dict.fromkeys(ids) if (p := self._produtos.get(i))], PAGINAS if dominio else 1
+        return [p for i in dict.fromkeys(ids) if (p := self._produtos.get(i))], PAGINAS if dominios else 1
+
+    def _dominio_dos_resultados(self, termo: str) -> str | None:
+        if termo not in self._dominios:
+            r = self._get("/products/search", status="active", site_id="MLB", q=termo, limit=20)
+            contagem = Counter(p.get("domain_id") for p in r.json().get("results", [])) if r.status_code == 200 else {}
+            self._dominios[termo] = max(contagem, key=contagem.get, default=None)
+        return self._dominios[termo]
 
     def _produto(self, pid: str, dados: dict | None) -> ProdutoColetado | None:
         r = self._get(f"/products/{pid}/items")

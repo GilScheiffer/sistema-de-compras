@@ -31,7 +31,7 @@ class Cliente:
         self.http = httpx.Client(headers=_HEADERS, timeout=30)
         self._ultima = 0.0
 
-    def buscar(self, termo: str, pagina: int = 1) -> tuple[list[ProdutoColetado], int]:
+    def buscar(self, termo: str, pagina: int = 1, nome: str | None = None) -> tuple[list[ProdutoColetado], int]:
         """Uma página de resultados e o total de páginas."""
         espera = PAUSA - (time.monotonic() - self._ultima)
         if espera > 0:

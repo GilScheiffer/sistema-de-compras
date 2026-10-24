@@ -69,7 +69,7 @@ def buscar_tudo(modulo, itens, marcas) -> tuple[dict[str, Encontrado], list[str]
             antes = len(encontrados)
             pagina, total = 1, 1
             while pagina <= min(total, PAGINAS_POR_ITEM):
-                produtos, total = cliente.buscar(item.busca, pagina)
+                produtos, total = cliente.buscar(item.busca, pagina, nome=item.nome)
                 for p in produtos:
                     if p.sku in encontrados:
                         continue  # já reconhecido pela busca de outro item

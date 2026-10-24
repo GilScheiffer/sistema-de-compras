@@ -1,4 +1,8 @@
-"""Robôs que buscam preços nas lojas."""
+"""Robôs que buscam preços nas lojas.
+
+Lojas de busca têm um Cliente com buscar(termo, pagina, nome) -> (produtos, total de páginas);
+`nome` é o nome do item no catálogo, para lojas que o usam como dica (Mercado Livre).
+"""
 
 from __future__ import annotations
 
